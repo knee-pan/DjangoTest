@@ -9,3 +9,6 @@
 * pyproject.toml
 * tox.ini
 * vscode extension.
+
+### gitignore
+https://www.toptal.com/developers/gitignore/
