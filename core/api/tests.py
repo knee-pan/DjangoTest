@@ -10,6 +10,8 @@ from ..models import Article
 # python manage.py test
 # python faker lib.
 
+# coverage run --source "core/*" manage.py test -v 2 & coverage report
+
 
 class TestArticle(APITestCase):
     url_list = reverse("article:list")

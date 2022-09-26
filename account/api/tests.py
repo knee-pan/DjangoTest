@@ -16,6 +16,8 @@ from rest_framework.test import APITestCase
 # # datayı python Faker kütüphanesi kullanarak düzenle
 
 
+# coverage run --source "account" manage.py test -v 2 & coverage report
+
 class TestUserRegister(APITestCase):
     url = reverse("account:register")
     url_access = reverse("token_obtain_pair")
