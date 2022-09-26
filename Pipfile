@@ -12,6 +12,7 @@ djangorestframework-simplejwt = "*"
 faker = "*"
 django-countries = "*"
 pillow = "*"
+coverage = "*"
 
 [dev-packages]
 flake8 = "*"

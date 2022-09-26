@@ -85,9 +85,6 @@ class ArticleCreateAPI(CreateAPIView):
     ordering_fields = ["pub_date"]
     # permission_classes = [IsAuthenticated, IsAdminUser]
 
-    # def perform_create(self, serializer):
-    # serializer.save(author=self.request.user)
-
 
 class ArticleDetailAPI(RetrieveAPIView):
     queryset = Article.objects.all()
@@ -116,7 +113,7 @@ class ArticlePutAPI(RetrieveUpdateAPIView):
     lookup_field = "slug"
 
     # def perform_update(self, serializer):
-    # serializer.save(author=self.request.user)
+    #     serializer.save(author=self.request.user)
 
 
 class CommentCreateAPIView(CreateAPIView):

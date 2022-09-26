@@ -25,22 +25,24 @@ class Company(models.Model):
     company_employee_count = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
-        return self.company_name
+        return str(self.id) + " " + self.company_name
 
 
 class Article(models.Model):
     pub_date = models.DateField(editable=False, auto_now_add=True)
     headline = models.CharField(max_length=200)
     content = models.TextField()
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, default=1)
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True, blank=True)
     slug = models.SlugField(unique=True, null=True, editable=False)
-    publisher = models.ForeignKey(Company, on_delete=models.CASCADE, default=1)
+    publisher = models.ForeignKey(Company, on_delete=models.CASCADE, null=True, blank=True)
+    # default=1, IntegrityError: The row in table 'core_article' with primary key '1' has an invalid fkey:
+    # core_article.publisher_id contains a value '4' that does not have a corresponding value in core_company.id
 
-    # class Meta: # for pagination sort error
-    #     ordering = ["-id"]
+    class Meta:  # for pagination sort error
+        ordering = ["-id"]
 
     def __str__(self):
-        return self.headline
+        return str(self.id) + "" + self.headline
 
     def get_slug(self):
         slug = slugify(self.headline.replace("ı", "i"))

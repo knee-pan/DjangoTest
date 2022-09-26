@@ -1,4 +1,4 @@
-# user sign up test
+# # user sign up test
 
 import json
 
@@ -7,13 +7,13 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-# APITestCase , self.client ile APIClient tetikler.
-# python manage.py test
-# test çalıştırıldığında arkada bir test db oluşturuluyor ve işlemler bittiğinde
-# test db siliniyor
+# # APITestCase , self.client ile APIClient tetikler.
+# # python manage.py test
+# # test çalıştırıldığında arkada bir test db oluşturuluyor ve işlemler bittiğinde
+# # test db siliniyor
 
 
-# datayı python Faker kütüphanesi kullanarak düzenle
+# # datayı python Faker kütüphanesi kullanarak düzenle
 
 
 class TestUserRegister(APITestCase):
@@ -28,7 +28,7 @@ class TestUserRegister(APITestCase):
         data = {"username": "ayse", "password": "sifre1234"}
 
         response = self.client.post(self.url, data)
-        self.assertEqual(201, response.status_code)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_invalid_pwd(self):
         """
@@ -57,29 +57,13 @@ class TestUserRegister(APITestCase):
         """
         self.test_user_registration()  # register olundu
         self.client.login(username="ayse", password="sifre1234")  # giris yaoildi
-        response = self.client.get(self.url)  # 403 - zaten giris yapildigi icin
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_user_auth_token_registration(self):
-        """
-        token ile giriş
-        """
-        self.test_user_registration()  # kul olusturuldu
-        data = {"username": "ayse", "password": "sifre1234"}
-        response = self.client.post(self.url_access, data)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # response access, refresh tokenlarini dondurur.
-        token = response.data["access"]
-        self.client.credentials(HTTP_AUTHORIZATION="Bearer " + token)
-        # gelen tokenı headera gönderdik
-        # tekrar giriş yapmaya çalışırsak 403 almalıyız, zaten oturum açmış old. için
-        response2 = self.client.get(self.url)
-        self.assertEqual(403, response2.status_code)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 class TestUserLogin(APITestCase):
     url_login = reverse("token_obtain_pair")
-
+    url_access = reverse("token_obtain_pair")
     # setUp hazır method override edilmiştir.
     # testler çalışmadan önce çalışan method, test için constructor olarak düşünülebilir.
 
@@ -115,7 +99,10 @@ class TestUserLogin(APITestCase):
         400 Bad Request dondurmeli"""
         data = {"username": "", "password": ""}
         response = self.client.post(self.url_access, data)
+        # print(self.user)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def tearDown(self) -> None:  # logout
-        return super().tearDown()
+    # def tearDown(self) -> None:
+    #     self.client.session.clear()
+    #     self.client.logout()
+    #     return super().tearDown()
